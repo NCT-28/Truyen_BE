@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.9.xsd">
+    <!--
+        Added the constraints for entity GroupTranslate.
+    -->
+    <changeSet id="20200618042843-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="group_translate_id"
+                                 baseTableName="group_translate_user"
+                                 constraintName="fk_group_translate_user_group_translate_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="group_translate"/>
+
+        <addForeignKeyConstraint baseColumnNames="user_id"
+                                 baseTableName="group_translate_user"
+                                 constraintName="fk_group_translate_user_user_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="users"/>
+        
+        <addForeignKeyConstraint baseColumnNames="group_translate_id"
+                                 baseTableName="group_translate_role"
+                                 constraintName="fk_group_translate_role_group_translate_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="group_translate"/>
+
+        <addForeignKeyConstraint baseColumnNames="role_id"
+                                 baseTableName="group_translate_role"
+                                 constraintName="fk_group_translate_role_role_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="role"/>
+        
+    </changeSet>
+</databaseChangeLog>
