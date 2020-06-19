@@ -17,13 +17,17 @@ import java.util.Optional;
 @Repository
 public interface CategoryRepository extends JpaRepository<Category, Long>, JpaSpecificationExecutor<Category> {
 
-    @Query(value = "select distinct category from Category category left join fetch category.truyens",
-        countQuery = "select count(distinct category) from Category category")
-    Page<Category> findAllWithEagerRelationships(Pageable pageable);
-
-    @Query("select distinct category from Category category left join fetch category.truyens")
-    List<Category> findAllWithEagerRelationships();
-
-    @Query("select category from Category category left join fetch category.truyens where category.id =:id")
-    Optional<Category> findOneWithEagerRelationships(@Param("id") Long id);
+//    @Query(value = "select distinct category from Category category left join fetch category.truyens",
+//        countQuery = "select count(distinct category) from Category category")
+//    Page<Category> findAllWithEagerRelationships(Pageable pageable);
+//
+//    @Query("select distinct category from Category category left join fetch category.truyens")
+//    List<Category> findAllWithEagerRelationships();
+    
+    /**Tim nhu vay se khong phan trang cac phan tu duoi duoc.... nhung la cach viet code rat ngon cho cau lenh sql.*/
+//    @Query("select category from Category category left join fetch category.truyens where category.id =:id")
+//    Optional<Category> findOneWithEagerRelationships(@Param("id") Long id);
+    
+    @Query(value = "select ca from Category ca where ca.name LIKE %:name%")
+    Page<Category> findAllCategorys(Pageable pageable, @Param("name") String name);
 }

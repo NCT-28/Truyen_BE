@@ -45,6 +45,7 @@ public class Truyen implements Serializable {
     private byte[] image;
 
     @Column(name = "image_content_type")
+    @JsonIgnore
     private String imageContentType;
 
     @Column(name = "fulls")
@@ -60,17 +61,21 @@ public class Truyen implements Serializable {
     private Boolean locked;
 
     @Column(name = "code")
+    @JsonIgnore
     private String code;
 
     @OneToMany(mappedBy = "truyen")
+    @JsonIgnore
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<Chuong> chuongs = new HashSet<>();
 
     @OneToMany(mappedBy = "truyen")
+    @JsonIgnore
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<View> views = new HashSet<>();
 
     @OneToMany(mappedBy = "truyen")
+    @JsonIgnore
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<Feedback> feadbacks = new HashSet<>();
 

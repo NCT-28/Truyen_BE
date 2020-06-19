@@ -102,9 +102,7 @@ public class Chuong implements Serializable {
         this.code = code;
     }
 
-    public Truyen getTruyen() {
-        return truyen;
-    }
+    
 
     public Chuong truyen(Truyen truyen) {
         this.truyen = truyen;

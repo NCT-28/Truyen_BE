@@ -12,11 +12,11 @@ import org.mapstruct.*;
 @Mapper(componentModel = "spring", uses = {TruyenMapper.class})
 public interface ViewMapper extends EntityMapper<ViewDTO, View> {
 
-    @Mapping(source = "truyen.id", target = "truyenId")
-    ViewDTO toDto(View view);
-
-    @Mapping(source = "truyenId", target = "truyen")
-    View toEntity(ViewDTO viewDTO);
+//    @Mapping(source = "truyen.id", target = "truyenId")
+//    ViewDTO toDto(View view);
+//
+//    @Mapping(source = "truyenId", target = "truyen")
+//    View toEntity(ViewDTO viewDTO);
 
     default View fromId(Long id) {
         if (id == null) {
