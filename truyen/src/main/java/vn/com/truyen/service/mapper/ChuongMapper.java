@@ -12,11 +12,11 @@ import org.mapstruct.*;
 @Mapper(componentModel = "spring", uses = {TruyenMapper.class})
 public interface ChuongMapper extends EntityMapper<ChuongDTO, Chuong> {
 
-    @Mapping(source = "truyen.id", target = "truyenId")
-    ChuongDTO toDto(Chuong chuong);
-
-    @Mapping(source = "truyenId", target = "truyen")
-    Chuong toEntity(ChuongDTO chuongDTO);
+//    @Mapping(source = "truyen.id", target = "truyenId")
+//    ChuongDTO toDto(Chuong chuong);
+//
+//    @Mapping(source = "truyenId", target = "truyen")
+//    Chuong toEntity(ChuongDTO chuongDTO);
 
     default Chuong fromId(Long id) {
         if (id == null) {

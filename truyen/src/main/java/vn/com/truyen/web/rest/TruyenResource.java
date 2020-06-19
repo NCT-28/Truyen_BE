@@ -9,6 +9,8 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,12 +19,18 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
 import vn.com.truyen.service.TruyenService;
 import vn.com.truyen.service.dto.TruyenDTO;
+import vn.com.truyen.service.mess.AuthorMess;
+import vn.com.truyen.service.mess.ChuongMess;
+import vn.com.truyen.service.mess.FeedbackMess;
+import vn.com.truyen.service.mess.TruyenMess;
+import vn.com.truyen.service.mess.ViewMess;
 import vn.com.truyen.web.rest.errors.BadRequestAlertException;
 
 /**
@@ -93,13 +101,18 @@ public class TruyenResource {
      * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of truyens in body.
      */
-//    @GetMapping("/truyens")
-//    public ResponseEntity<List<TruyenDTO>> getAllTruyens(TruyenCriteria criteria, Pageable pageable) {
-//        log.debug("REST request to get Truyens by criteria: {}", criteria);
-//        Page<TruyenDTO> page = truyenQueryService.findByCriteria(criteria, pageable);
-//        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
-//        return ResponseEntity.ok().headers(headers).body(page.getContent());
-//    }
+    @GetMapping("/truyens")
+    public ResponseEntity<TruyenMess> getAllTruyens(
+    		@RequestParam(defaultValue = "1") Integer pageNo,
+			@RequestParam(defaultValue = "10") Integer pageSize, 
+			@RequestParam(defaultValue = "") String name,
+			@RequestParam(defaultValue = "ASC") String sortType, 
+			@RequestParam(defaultValue = "name") String sortBy) {
+        log.debug("REST request to get Truyens!");
+        TruyenMess truyenMess = truyenService.findAllTruyens(pageNo, pageSize, name, sortType, sortBy);
+
+		return new ResponseEntity<>(truyenMess, new HttpHeaders(), HttpStatus.OK);
+	}
 
 
     /**
@@ -114,7 +127,60 @@ public class TruyenResource {
         Optional<TruyenDTO> truyenDTO = truyenService.findOne(id);
         return ResponseUtil.wrapOrNotFound(truyenDTO);
     }
+    
+    /**
+     * 
+     * @param id
+     * @return
+     */
+    
+    @GetMapping("/truyens/{id}/chuongs")
+    public ResponseEntity<ChuongMess> getAllChuongByTruyen(
+    		@PathVariable Long id,
+    		@RequestParam(defaultValue = "1") Integer pageNo,
+			@RequestParam(defaultValue = "10") Integer pageSize, 
+			@RequestParam(defaultValue = "name") String sortBy) {
+        log.debug("REST request to get Truyen : {}", id);
+        ChuongMess chuongMess=  truyenService.findAllChuongByTruyenId(pageNo, pageSize, id, sortBy);
+        return new ResponseEntity<ChuongMess>(chuongMess, new HttpHeaders(), HttpStatus.OK);
+    }
 
+    /**
+     * 
+     * @param id
+     * @param pageNo
+     * @param pageSize
+     * @param sortBy
+     * @return
+     */
+    @GetMapping("/truyens/{id}/views")
+    public ResponseEntity<ViewMess> getAllViewByTruyen(
+    		@PathVariable Long id,
+    		@RequestParam(defaultValue = "1") Integer pageNo,
+			@RequestParam(defaultValue = "10") Integer pageSize, 
+			@RequestParam(defaultValue = "name") String sortBy) {
+        log.debug("REST request to get Truyen : {}", id);
+       ViewMess viewMess = truyenService.findAllViewByTruyenId(pageNo, pageSize, id, sortBy);
+        return new ResponseEntity<>(viewMess, new HttpHeaders(), HttpStatus.OK);
+    }
+    /**
+     * 
+     * @param id
+     * @param pageNo
+     * @param pageSize
+     * @param sortBy
+     * @return
+     */
+    @GetMapping("/truyens/{id}/feedbacks")
+    public ResponseEntity<FeedbackMess> getAllFeedbackByTruyen(
+    		@PathVariable Long id,
+    		@RequestParam(defaultValue = "1") Integer pageNo,
+			@RequestParam(defaultValue = "10") Integer pageSize, 
+			@RequestParam(defaultValue = "name") String sortBy) {
+        log.debug("REST request to get Truyen : {}", id);
+       FeedbackMess feedbackMess = truyenService.findAllFeedbackByTruyenId(pageNo, pageSize, id, sortBy);
+        return new ResponseEntity<>(feedbackMess, new HttpHeaders(), HttpStatus.OK);
+    }
     /**
      * {@code DELETE  /truyens/:id} : delete the "id" truyen.
      *

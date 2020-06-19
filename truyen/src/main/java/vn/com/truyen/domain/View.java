@@ -69,10 +69,6 @@ public class View implements Serializable {
         this.views = views;
     }
 
-    public Truyen getTruyen() {
-        return truyen;
-    }
-
     public View truyen(Truyen truyen) {
         this.truyen = truyen;
         return this;

@@ -2,6 +2,7 @@ package vn.com.truyen.service;
 
 import vn.com.truyen.service.dto.AuthorDTO;
 import vn.com.truyen.service.mess.AuthorMess;
+import vn.com.truyen.service.mess.TruyenMess;
 
 import org.hibernate.type.descriptor.java.IntegerTypeDescriptor;
 import org.springframework.data.domain.Page;
@@ -31,6 +32,11 @@ public interface AuthorService {
     //Page<AuthorDTO> findAll(Pageable pageable);
     
     AuthorMess getAllAuthors(Integer pageNo, Integer pageSize, String name, String sortType, String sortBy);
+    
+    
+    
+    
+    TruyenMess getAllTruyenOfAuthorId(Integer pageNo, Integer pageSize,Long id,  String name, String sortBy);
 
     /**
      * Get the "id" author.

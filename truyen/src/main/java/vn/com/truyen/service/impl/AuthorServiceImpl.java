@@ -2,10 +2,13 @@ package vn.com.truyen.service.impl;
 
 import vn.com.truyen.service.AuthorService;
 import vn.com.truyen.domain.Author;
+import vn.com.truyen.domain.Truyen;
 import vn.com.truyen.repository.AuthorRepository;
+import vn.com.truyen.repository.TruyenRepository;
 import vn.com.truyen.service.dto.AuthorDTO;
 import vn.com.truyen.service.mapper.AuthorMapper;
 import vn.com.truyen.service.mess.AuthorMess;
+import vn.com.truyen.service.mess.TruyenMess;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,9 +36,13 @@ public class AuthorServiceImpl implements AuthorService {
 
 	private final AuthorMapper authorMapper;
 
-	public AuthorServiceImpl(AuthorRepository authorRepository, AuthorMapper authorMapper) {
+	private final TruyenRepository truyenRepository;
+
+	public AuthorServiceImpl(AuthorRepository authorRepository, AuthorMapper authorMapper,
+			TruyenRepository truyenRepository) {
 		this.authorRepository = authorRepository;
 		this.authorMapper = authorMapper;
+		this.truyenRepository = truyenRepository;
 	}
 
 	/**
@@ -66,8 +73,7 @@ public class AuthorServiceImpl implements AuthorService {
 //            .map(authorMapper::toDto);
 //    }
 	@Override
-	public AuthorMess getAllAuthors(Integer pageNo, Integer pageSize, String name, String sortType,
-			String sortBy) {
+	public AuthorMess getAllAuthors(Integer pageNo, Integer pageSize, String name, String sortType, String sortBy) {
 		Pageable pageable = null;
 		if (sortType.equals("ASC")) {
 			pageable = PageRequest.of(pageNo - 1, pageSize, Sort.by(Direction.ASC, sortBy));
@@ -80,6 +86,25 @@ public class AuthorServiceImpl implements AuthorService {
 		authorMess.setMessage("Get all authors success!");
 		authorMess.setTotalAuthors(enties.getTotalElements());
 		return authorMess;
+	}
+
+	/**
+	 * 
+	 * 
+	 */
+
+	@Override
+	public TruyenMess getAllTruyenOfAuthorId(Integer pageNo, Integer pageSize, Long id, String name, String sortBy) {
+
+		Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
+
+		Page<Truyen> pageTruyen = truyenRepository.findAllTruyenByAuthorId(pageable, id, name, "tr." + sortBy);
+
+		TruyenMess truyenMess = new TruyenMess();
+		truyenMess.setMessage("get all truyen by author id " + id + " success!");
+		truyenMess.setListTruyens(pageTruyen.getContent());
+		truyenMess.setTotalTruyens(pageTruyen.getTotalElements());
+		return truyenMess;
 	}
 
 	/**

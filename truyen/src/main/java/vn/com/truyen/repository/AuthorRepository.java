@@ -17,4 +17,5 @@ public interface AuthorRepository extends JpaRepository<Author, Long>, JpaSpecif
 	
 	@Query(" SELECT au FROM Author au WHERE au.name LIKE %:name% ")
 	Page<Author> findAllAuthors(Pageable pageable, @Param("name") String name);
+	
 }

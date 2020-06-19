@@ -1,6 +1,9 @@
 package vn.com.truyen.service;
 
 import vn.com.truyen.service.dto.CategoryDTO;
+import vn.com.truyen.service.mapper.CategoryMapper;
+import vn.com.truyen.service.mess.CategoryMess;
+import vn.com.truyen.service.mess.TruyenMess;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -27,22 +30,43 @@ public interface CategoryService {
      * @return the list of entities.
      */
     Page<CategoryDTO> findAll(Pageable pageable);
-
     /**
-     * Get all the categories with eager load of many-to-many relationships.
-     *
-     * @return the list of entities.
+     * 
+     * @param pageNo
+     * @param pageSize
+     * @param name
+     * @param sortType
+     * @param sortBy
+     * @return
      */
-    Page<CategoryDTO> findAllWithEagerRelationships(Pageable pageable);
-
-
+    CategoryMess findAllCategorys(Integer pageNo, Integer pageSize, String name, String sortType, String sortBy);
+    
     /**
-     * Get the "id" category.
-     *
-     * @param id the id of the entity.
-     * @return the entity.
+     * 
+     * @param pageNo
+     * @param pageSize
+     * @param name
+     * @param sortBy
+     * @return
      */
-    Optional<CategoryDTO> findOne(Long id);
+    TruyenMess findAllTruyenbyCategoryId(Integer pageNo, Integer pageSize, Long id, String name, String sortBy);
+    
+    
+//    /**
+//     * Get all the categories with eager load of many-to-many relationships.
+//     *
+//     * @return the list of entities.
+//     */
+//    Page<CategoryDTO> findAllWithEagerRelationships(Pageable pageable);
+
+
+//    /**
+//     * Get the "id" category.
+//     *
+//     * @param id the id of the entity.
+//     * @return the entity.
+//     */
+//    Optional<CategoryDTO> findOne(Long id);
 
     /**
      * Delete the "id" category.

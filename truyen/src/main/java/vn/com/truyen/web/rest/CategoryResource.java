@@ -3,6 +3,9 @@ package vn.com.truyen.web.rest;
 import vn.com.truyen.service.CategoryService;
 import vn.com.truyen.web.rest.errors.BadRequestAlertException;
 import vn.com.truyen.service.dto.CategoryDTO;
+import vn.com.truyen.service.mess.AuthorMess;
+import vn.com.truyen.service.mess.CategoryMess;
+import vn.com.truyen.service.mess.TruyenMess;
 import vn.com.truyen.service.dto.CategoryCriteria;
 
 import io.github.jhipster.web.util.HeaderUtil;
@@ -92,26 +95,31 @@ public class CategoryResource {
      * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of categories in body.
      */
-//    @GetMapping("/categories")
-//    public ResponseEntity<List<CategoryDTO>> getAllCategories(CategoryCriteria criteria, Pageable pageable) {
-//        log.debug("REST request to get Categories by criteria: {}", criteria);
-//        Page<CategoryDTO> page = categoryQueryService.findByCriteria(criteria, pageable);
-//        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
-//        return ResponseEntity.ok().headers(headers).body(page.getContent());
-//    }
+    @GetMapping("/categories")
+    public ResponseEntity<CategoryMess> getAllCategories(
+    		@RequestParam(defaultValue = "1") Integer pageNo,
+			@RequestParam(defaultValue = "10") Integer pageSize, 
+			@RequestParam(defaultValue = "") String name,
+			@RequestParam(defaultValue = "ASC") String sortType, 
+			@RequestParam(defaultValue = "name") String sortBy) {
+        log.debug("REST request to get Categories! ");
+        
+       CategoryMess categoryMess= categoryService.findAllCategorys(pageNo, pageSize, name, sortType, sortBy);
+        return new ResponseEntity<>(categoryMess, new HttpHeaders(), HttpStatus.OK);
+    }
 
-
-    /**
-     * {@code GET  /categories/:id} : get the "id" category.
-     *
-     * @param id the id of the categoryDTO to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the categoryDTO, or with status {@code 404 (Not Found)}.
-     */
-    @GetMapping("/categories/{id}")
-    public ResponseEntity<CategoryDTO> getCategory(@PathVariable Long id) {
-        log.debug("REST request to get Category : {}", id);
-        Optional<CategoryDTO> categoryDTO = categoryService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(categoryDTO);
+    
+    @GetMapping("/categories/{id}/truyens")
+    public ResponseEntity<TruyenMess> getAllTruyenByCategories(
+    		@PathVariable Long id,
+    		@RequestParam(defaultValue = "1") Integer pageNo,
+			@RequestParam(defaultValue = "10") Integer pageSize, 
+			@RequestParam(defaultValue = "") String name,
+			@RequestParam(defaultValue = "name") String sortBy) {
+        log.debug("REST request to get Categories! ");
+        
+       TruyenMess truyenMess= categoryService.findAllTruyenbyCategoryId(pageNo, pageSize, id, name, sortBy);
+        return new ResponseEntity<>(truyenMess, new HttpHeaders(), HttpStatus.OK);
     }
 
     /**
