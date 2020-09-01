@@ -1,0 +1,217 @@
+
+application {
+  config {
+    baseName uaa,
+    applicationType uaa,
+    packageName vn.com.truyen,
+    authenticationType uaa,
+    uaaBaseName "uaa",
+   	prodDatabaseType postgresql,
+    devDatabaseType postgresql,
+    buildTool maven
+  }
+}
+
+application {
+  config {
+    baseName gateways,
+    applicationType gateway,
+    packageName vn.com.truyen,
+    serviceDiscoveryType eureka,
+    authenticationType uaa,
+    uaaBaseName "uaa",
+    prodDatabaseType postgresql,
+    devDatabaseType postgresql,
+    buildTool maven,
+    clientFramework angularX
+  }
+}
+application {
+  config {
+    baseName truyen,
+    applicationType microservice,
+    packageName vn.com.truyen,
+    serviceDiscoveryType eureka,
+    authenticationType uaa,
+    uaaBaseName "uaa",
+    prodDatabaseType postgresql,
+    devDatabaseType postgresql,
+    buildTool maven,
+    serverPort 8081,
+    skipUserManagement true
+  }
+  entities Truyen, Chuong, Category, View, Author, Feedback
+}
+application {
+  config {
+    baseName usermanagent,
+    applicationType microservice,
+    packageName vn.com.truyen.usermanagent,
+    serviceDiscoveryType eureka,
+   authenticationType uaa,
+    uaaBaseName "uaa",
+    prodDatabaseType postgresql,
+    devDatabaseType postgresql,
+    buildTool maven,
+    serverPort 8082,
+    skipUserManagement true
+  }
+  entities Users, UserInfo, Role, GroupTranslate, Functions
+}
+application {
+  config {
+    baseName notification,
+    applicationType microservice,
+    packageName vn.com.truyen.notification,
+    serviceDiscoveryType eureka,
+    authenticationType uaa,
+    uaaBaseName "uaa",
+    prodDatabaseType postgresql,
+    devDatabaseType postgresql,
+    cacheProvider no,
+    enableHibernateCache false,
+    buildTool maven,
+    serverPort 8083,
+    skipUserManagement true
+  }
+  entities Notification
+}
+
+/* entities for heyzoo, nhomtruyen */
+entity Author{
+	name String required,
+    description String,
+    locked Boolean,
+    code String
+}
+entity Category{
+	name String required,
+    description String,
+    locked Boolean,
+    code String
+}
+entity Truyen{
+	name String required,
+    description String,
+    soChuong Integer,
+    nguon String, 
+    image ImageBlob,
+    fulls Boolean,
+    hot Boolean,
+    news Boolean,
+	locked Boolean,
+    code String
+}
+entity Chuong{
+	name String required,
+    content String,
+    locked Boolean,
+    code String
+}
+entity View{
+	dayView ZonedDateTime,
+    views Integer
+}
+entity Feedback{
+	topic String required
+    nameUserSend String
+    email String required pattern(/^[^@\s]+@[^@\s]+\.[^@\s]+$/)
+    content String
+    status Boolean
+    code String
+    creadedDay ZonedDateTime
+}
+relationship ManyToMany {
+   Category{truyen required} to Truyen {name}
+}
+relationship ManyToOne {
+   Truyen{author(name) required} to Author
+}
+relationship OneToMany{
+	Truyen{chuong(name) required} to Chuong,
+    Truyen{view(dayView) required} to View,
+    Truyen{feadback(topic) required} to Feedback
+}
+
+
+service Truyen, Chuong, Category, View, Author with serviceClass
+paginate Truyen, Chuong, Category, View, Author with pagination
+
+dto Truyen, Chuong, Category, View, Author with mapstruct
+
+service Truyen, Chuong, Category, View, Author with serviceImpl
+
+filter Truyen, Chuong, Category, View, Author
+
+
+/* Entities for notification microservice */
+entity Notification {
+    date Instant required
+    details String
+    sentDate Instant required
+    format NotificationType required
+    userId Long required
+    productId Long required
+}
+enum NotificationType {
+    EMAIL, SMS, PARCEL
+}
+microservice Notification with notification
+
+entity Users{
+	login String required,
+	passwordHash String required,
+    email String required pattern(/^[^@\s]+@[^@\s]+\.[^@\s]+$/),
+    imageUrl String,
+    activated Boolean,
+    locked Boolean,
+    canChange Boolean,
+    mustChange Boolean,
+    activationKey String,
+    resetKey String,
+    resetDate ZonedDateTime,
+    code String  
+}
+entity UserInfo{
+ 	fullName String required
+ 	firstName String required
+    lastName String required
+    initials String	 required
+    comment String required 
+    mobile Integer required  
+}
+entity Role{
+	name String required,
+    content String,
+    locked Boolean,
+    code String
+}
+entity Functions{
+	name String required,
+    description String,
+    code String
+}
+entity GroupTranslate{
+	name String required,
+    description String,
+    code String
+}
+relationship ManyToMany {
+	GroupTranslate{user required} to Users {login}
+	GroupTranslate{role required} to Role {name}
+    Users{role required} to Role {login}
+    Role{function required} to Functions {name}
+}
+relationship OneToOne {
+    UserInfo{user(login) required} to Users
+}
+service Users, UserInfo, Role, GroupTranslate, Functions with serviceClass
+paginate Users, UserInfo, Role, GroupTranslate, Functions with pagination
+dto Users, UserInfo, Role, GroupTranslate, Functions with mapstruct
+
+service Users, UserInfo, Role, GroupTranslate, Functions with serviceImpl
+
+filter Users, UserInfo, Role, GroupTranslate, Functions
+
+
+

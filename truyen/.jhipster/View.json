@@ -1,0 +1,33 @@
+{
+  "name": "View",
+  "fields": [
+    {
+      "fieldName": "dayView",
+      "fieldType": "ZonedDateTime"
+    },
+    {
+      "fieldName": "views",
+      "fieldType": "Integer"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "truyen",
+      "otherEntityRelationshipName": "view",
+      "relationshipName": "truyen",
+      "otherEntityField": "id"
+    }
+  ],
+  "changelogDate": "20200618042143",
+  "entityTableName": "view",
+  "dto": "mapstruct",
+  "pagination": "pagination",
+  "service": "serviceImpl",
+  "jpaMetamodelFiltering": true,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "clientRootFolder": "",
+  "applications": ["truyen"]
+}
